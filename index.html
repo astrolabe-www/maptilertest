@@ -49,6 +49,9 @@ var layer = new ol.layer.Tile({
 
 var map = new ol.Map({
   target: 'map',
+  interactions: defaultInteractions().extend([
+    new DragRotateAndZoom()
+  ]),
   layers: [
     layer,
   ],
