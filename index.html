@@ -12,16 +12,16 @@ body { width:100%; height:100%; background: #ffffff; }
 #map { position: absolute; height: 100%; width: 100%; background-color: #FFFFFF; }
 #slider { position: absolute; top: 10px; right: 10px; }
 </style>
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/openlayers/openlayers.github.io@master/en/v6.3.1/css/ol.css" type="text/css">
-<!-- <link rel="stylesheet" href="https://cdn.maptiler.com/ol/v5.3.0/ol.css" type="text/css"> -->
+<!-- <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/openlayers/openlayers.github.io@master/en/v6.3.1/css/ol.css" type="text/css"> -->
+<link rel="stylesheet" href="https://cdn.maptiler.com/ol/v5.3.0/ol.css" type="text/css">
 <script src="https://cdn.polyfill.io/v2/polyfill.min.js?features=requestAnimationFrame,Element.prototype.classList,URL,fetch,Function.prototype.bind,es5&flags=always,gated&unknown=polyfill" type="text/javascript"></script>
-<script src="https://cdn.jsdelivr.net/gh/openlayers/openlayers.github.io@master/en/v6.3.1/build/ol.js" type="text/javascript"></script>
-<!-- <script src="https://cdn.maptiler.com/ol/v5.3.0/ol.js" type="text/javascript"></script> -->
+<!-- <script src="https://cdn.jsdelivr.net/gh/openlayers/openlayers.github.io@master/en/v6.3.1/build/ol.js" type="text/javascript"></script> -->
+<script src="https://cdn.maptiler.com/ol/v5.3.0/ol.js" type="text/javascript"></script>
   
 </head>
 <body>
 <div id="map"></div>
-<input id="slider" type="range" min="0" max="1" step="0.1" value="1" oninput="layer.setOpacity(this.value)">
+
 <script type="text/javascript">
 var mapExtent = [0.00000000, -10000.00000000, 10000.00000000, 0.00000000];
 var mapMinZoom = 0;
@@ -50,13 +50,16 @@ var layer = new ol.layer.Tile({
   })
 });
 
+ol.events.condition.customDragRotate = function(mapBrowserEvent) {
+  var browserEvent = mapBrowserEvent.originalEvent;
+  return (browserEvent.shiftKey);
+};
+
 var map = new ol.Map({
   target: 'map',
-  /*
   interactions: ol.interaction.defaults().extend([
-    new ol.interaction.DragRotateAndZoom()
+    new ol.interaction.DragRotate({ condition: ol.events.condition.customDragRotate })
   ]),
-  */
   layers: [
     layer,
   ],
@@ -66,6 +69,13 @@ var map = new ol.Map({
     maxResolution: mapTileGrid.getResolution(mapMinZoom)
   })
 });
+
+map.getInteractions().getArray().forEach(function(interaction) {
+  if (interaction instanceof ol.interaction.DragZoom) {
+    map.removeInteraction(interaction);
+  }
+});
+
 map.getView().fit(mapExtent, map.getSize());
 </script>
 </body>
