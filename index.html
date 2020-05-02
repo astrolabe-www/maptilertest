@@ -30,8 +30,8 @@
     <script type="text/javascript">
       var mapExtent = [0, -16384, 16384, 0];
       var mapMinZoom = 0;
-      var mapMaxZoom = 6;
-      var mapMaxResolution = 1;
+      var mapMaxZoom = 7;
+      var mapMaxResolution = 0.5;
       var tileExtent = [0, -16384, 16384, 0];
 
       var mapResolutions = [];
@@ -49,7 +49,7 @@
         source: new ol.source.XYZ({
           attributions: 'gdal2tiles',
           tileGrid: mapTileGrid,
-          tilePixelRatio: 1.00000000,
+          tilePixelRatio: 2.00000000,
           url: "imgs/{z}/{x}/{-y}.png",
         })
       });
